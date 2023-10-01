@@ -18,6 +18,7 @@ if not vim.loop.fs_stat(lazypath) then
     lazypath,
   }
 end
+
 vim.opt.rtp:prepend(lazypath)
 
 -- NOTE: Here is where you install your plugins.
@@ -122,11 +123,14 @@ require('lazy').setup({
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
+    main = "ibl",
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
     opts = {
-      char = '┊',
-      show_trailing_blankline_indent = false,
+      indent = { char = '│' },
+      whitespace = {
+        remove_blankline_trail = true,
+      },
     },
   },
 
@@ -191,6 +195,10 @@ vim.o.expandtab = true
 -- Set highlight on search
 vim.o.hlsearch = true
 
+-- Show whitespace
+vim.wo.list = true
+vim.opt.listchars:append "space:·"
+
 -- Make line numbers default
 vim.wo.number = true
 vim.wo.relativenumber = true
@@ -222,6 +230,8 @@ vim.o.completeopt = 'menuone,noselect'
 vim.o.termguicolors = true
 
 -- [[ Basic Keymaps ]]
+
+vim.cmd "cnoreabbrev W w"
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
@@ -307,7 +317,10 @@ vim.keymap.set(
   'n',
   '<leader>sf',
   function()
-    require('telescope.builtin').find_files({ hidden = true })
+    require('telescope.builtin').find_files({
+      hidden = true,
+      file_ignore_patterns = { ".git" },
+    })
   end,
   { desc = '[S]earch [F]iles' }
 )
