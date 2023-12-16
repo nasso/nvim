@@ -21,7 +21,7 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
 return {
   "nvim-tree/nvim-tree.lua",
   version = "*",
-  lazy = false,
+  cmd = { 'NvimTreeToggle', 'NvimTreeOpen' },
   config = function()
     require("nvim-tree").setup {
       renderer = {
@@ -29,20 +29,6 @@ return {
           show = {
             file = false,
             folder = false,
-          },
-          glyphs = {
-            default = ' ',
-            symlink = '*',
-            folder = {
-              arrow_closed = ">",
-              arrow_open = "v",
-              default = "o",
-              open = "o",
-              empty = "o",
-              empty_open = "o",
-              symlink = "*",
-              symlink_open = "*",
-            }
           }
         }
       }
