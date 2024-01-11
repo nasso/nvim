@@ -101,11 +101,12 @@ return {
 
       require('mason-lspconfig').setup {
         ensure_installed = {
+          "efm",
+          "eslint",
           "lua_ls",
+          "rust_analyzer",
           "tailwindcss",
           "tsserver",
-          "rust_analyzer",
-          "efm",
         },
         handlers = {
           lsp_zero.default_setup,
