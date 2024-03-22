@@ -149,7 +149,7 @@ return {
                 documentRangeFormatting = true,
               },
               settings = {
-                rootMarkers = { '.git/' },
+                rootMarkers = { '.git/', '.jj/' },
                 languages = {
                   javascript = { prettierd },
                   javascriptreact = { prettierd },
