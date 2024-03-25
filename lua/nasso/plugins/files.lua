@@ -45,6 +45,7 @@ return {
         keymaps = {
           ["<C-h>"] = false,
           ["<C-l>"] = false,
+          ["<C-c>"] = false,
         }
       }
 
