@@ -25,9 +25,13 @@ vim.keymap.set({ 'n', 'i', 'v' }, '<C-j>', '<C-w><C-j>', { silent = true })
 vim.keymap.set({ 'n', 'i', 'v' }, '<C-k>', '<C-w><C-k>', { silent = true })
 vim.keymap.set({ 'n', 'i', 'v' }, '<C-l>', '<C-w><C-l>', { silent = true })
 
--- make it so that :W == :w and :Q == :q
+-- make some commands case insensitive because omfg!!!
 vim.cmd "cnoreabbrev W w"
 vim.cmd "cnoreabbrev Q q"
+vim.cmd "cnoreabbrev E e"
+
+-- "yes please YANK when i PASTE" - Statement dreamed up by the utterly Deranged
+vim.keymap.set("x", "p", "P", { silent = true })
 
 -- move lines around with J and K when selected
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { silent = true })
