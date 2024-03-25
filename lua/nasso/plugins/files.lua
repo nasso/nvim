@@ -1,22 +1,14 @@
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
-local function open_nvim_tree(data)
+local function auto_cd(data)
   -- buffer is a directory
   local directory = vim.fn.isdirectory(data.file) == 1
 
-  if not directory then
-    return
+  if directory then
+    -- change to the directory
+    vim.cmd.cd(data.file)
   end
-
-  -- change to the directory
-  vim.cmd.cd(data.file)
-
-  -- open the tree
-  require("nvim-tree.api").tree.open()
 end
 
-vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = open_nvim_tree })
+vim.api.nvim_create_autocmd({ "VimEnter" }, { callback = auto_cd })
 
 return {
   {
@@ -40,29 +32,8 @@ return {
   },
 
   {
-    -- file tree
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    cmd = { 'NvimTreeToggle', 'NvimTreeOpen' },
-    config = function()
-      require("nvim-tree").setup {
-        renderer = {
-          icons = {
-            show = {
-              file = false,
-              folder = false,
-            }
-          }
-        },
-        filters = {
-          custom = { '^\\.git$', '^\\.jj$' }
-        },
-        diagnostics = {
-          enable = true,
-          show_on_dirs = true,
-        },
-      }
-    end,
+    -- explorer
+    "tpope/vim-vinegar",
   },
 
   {
