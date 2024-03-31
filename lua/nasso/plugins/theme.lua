@@ -16,8 +16,32 @@ return {
       options = {
         icons_enabled = false,
         theme = 'ayu',
-        component_separators = '|',
-        section_separators = '',
+        component_separators = '',
+        section_separators = { left = '', right = '' },
+      },
+      sections = {
+        lualine_a = {
+          { 'mode', separator = { left = '', right = '' } }
+        },
+        lualine_b = { 'filename', 'branch' },
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = { 'filetype' },
+        lualine_z = {
+          { 'location', separator = { left = '', right = '' } },
+        },
+      },
+      inactive_sections = {
+        lualine_a = {
+          { 'filename', separator = { left = '', right = '' } },
+        },
+        lualine_b = {},
+        lualine_c = {},
+        lualine_x = {},
+        lualine_y = {},
+        lualine_z = {
+          { 'location', separator = { left = '', right = '' } },
+        },
       },
     },
   },
