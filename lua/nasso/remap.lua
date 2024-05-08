@@ -52,3 +52,15 @@ vim.keymap.set(
   end,
   { desc = 'Toggle dark mode' }
 )
+
+-- <C-i> in insert mode will insert a nano id
+vim.keymap.set(
+  'i',
+  '/id',
+  function()
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    local text = vim.fn.system("pnpm dlx nanoid"):match('(%S+)%s*$')
+    vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { text })
+  end,
+  { desc = 'Insert a NanoID' }
+)
