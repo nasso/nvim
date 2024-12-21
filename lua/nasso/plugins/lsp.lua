@@ -54,8 +54,40 @@ return {
       local cmp = require('cmp')
       local cmp_action = lsp_zero.cmp_action()
 
+      local win_cfg = cmp.config.window.bordered()
+      win_cfg.col_offset = -1
+
       cmp.setup {
-        formatting = lsp_zero.cmp_format(),
+        window = {
+          completion = win_cfg,
+          documentation = win_cfg,
+        },
+        formatting = {
+          fields = { "abbr", "kind", "menu" },
+          format = function(entry, item)
+            local src = entry.source.name
+
+            if src == "nvim_lsp" then
+              if
+                  entry.completion_item.labelDetails
+                  and entry.completion_item.labelDetails.detail
+              then
+                item.menu = string.format(
+                  "[lsp]%s",
+                  entry.completion_item.labelDetails.detail
+                )
+              else
+                item.menu = "[lsp]"
+              end
+            elseif src == "nvim_lua" then
+              item.menu = "[nvim]"
+            else
+              item.menu = string.format("[%s]", src)
+            end
+
+            return item
+          end,
+        },
         mapping = cmp.mapping.preset.insert {
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
