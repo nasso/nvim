@@ -17,6 +17,12 @@ return {
     branch = '0.1.x',
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
+      require('telescope').setup {
+        defaults = {
+          dynamic_preview_title = true,
+        }
+      }
+
       local builtin = require('telescope.builtin')
 
       vim.keymap.set('n', '<leader>sf', function()
@@ -31,9 +37,15 @@ return {
           hidden = true,
           file_ignore_patterns = { ".git", '.jj' },
           additional_args = { "--no-require-git" },
+          disable_coordinates = true,
         })
       end, {})
       vim.keymap.set('n', '<leader>o', builtin.buffers, {})
+      vim.keymap.set('n', '<leader>d', builtin.diagnostics, {})
+      vim.keymap.set("n", "gd", builtin.lsp_definitions, {})
+      vim.keymap.set("n", "gi", builtin.lsp_implementations, {})
+      vim.keymap.set("n", "go", builtin.lsp_type_definitions, {})
+      vim.keymap.set("n", "gr", builtin.lsp_references, {})
     end
   },
 
