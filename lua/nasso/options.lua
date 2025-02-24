@@ -89,3 +89,13 @@ end
 set_cursorline("WinLeave", false)
 set_cursorline("WinEnter", true)
 set_cursorline("FileType", false, "TelescopePrompt")
+
+-- custom title
+vim.go.title = true
+vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
+  group = vim.api.nvim_create_augroup("title-cwd", { clear = true }),
+  callback = function()
+    local name = vim.fs.basename(vim.fn.getcwd())
+    vim.go.titlestring = "nvim:" .. name .. "/"
+  end,
+})
