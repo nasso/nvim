@@ -132,14 +132,7 @@ return {
       lsp_zero.format_on_save(format_opts)
 
       require('mason-lspconfig').setup {
-        ensure_installed = {
-          "efm",
-          "eslint",
-          "lua_ls",
-          "rust_analyzer",
-          "tailwindcss",
-          "ts_ls",
-        },
+        ensure_installed = { "efm" },
         handlers = {
           lsp_zero.default_setup,
           rust_analyzer = function()
@@ -155,6 +148,18 @@ return {
                 }
               }
             }
+          end,
+          clangd = function()
+            local cmd = {
+              "clangd",
+              "--background-index",
+              "--clang-tidy",
+              "--log=error",
+            }
+            if vim.env.LSP_CLANGD_QUERY_DRIVER then
+              cmd[#cmd + 1] = "--query-driver=" .. vim.env.LSP_CLANGD_QUERY_DRIVER
+            end
+            require('lspconfig').clangd.setup { cmd = cmd }
           end,
           lua_ls = function()
             -- (optional) configure lua language server for neovim
