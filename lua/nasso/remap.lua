@@ -37,6 +37,7 @@ vim.cmd "cnoreabbrev Q q"
 vim.cmd "cnoreabbrev Qa qa"
 vim.cmd "cnoreabbrev QA qa"
 vim.cmd "cnoreabbrev E e"
+vim.cmd "cnoreabbrev Vs vs"
 
 -- "yes please YANK when i PASTE" - Statement dreamed up by the utterly Deranged
 vim.keymap.set("x", "p", "P", { silent = true })
