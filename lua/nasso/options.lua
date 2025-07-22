@@ -63,6 +63,9 @@ vim.opt.completeopt = "menuone,noselect"
 -- show whitespace characters other than regular spaces
 vim.wo.list = true
 
+-- rounded floating windows by default
+-- vim.go.winborder = 'rounded'
+
 -- make `.h` files always be C by default (this line by c++ hate gang)
 vim.g.c_syntax_for_h = true
 

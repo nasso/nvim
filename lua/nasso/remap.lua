@@ -77,3 +77,7 @@ vim.keymap.set(
   end,
   { desc = 'Insert a NanoID' }
 )
+
+-- LSP stuff
+vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover({border = "rounded"})<cr>')
+vim.keymap.set('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help({border = "rounded"})<cr>')
