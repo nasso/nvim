@@ -27,6 +27,18 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
+  {
+    'Shatur/neovim-ayu',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      require('ayu').setup {
+        mirage = true
+      }
+
+      vim.cmd.colorscheme "ayu"
+    end,
+  },
 
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -47,7 +59,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -71,7 +83,7 @@ require('lazy').setup({
   },
 
   -- Useful plugin to show you pending keybinds.
-  { 'folke/which-key.nvim', opts = {} },
+  -- { 'folke/which-key.nvim', opts = {} },
   {
     -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -85,25 +97,12 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
+        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk,
+          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
         vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
         vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
       end,
     },
-  },
-
-  {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-
-      require('onedark').setup {
-        toggle_style_key = '<leader>t',
-        toggle_style_list = { 'light', 'dark' },
-      }
-    end,
   },
 
   {
@@ -113,7 +112,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'ayu',
         component_separators = '|',
         section_separators = '',
       },
@@ -132,7 +131,7 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',  opts = {} },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -164,16 +163,6 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
-  {
-    "folke/zen-mode.nvim",
-    opts = {
-      window = {
-        backdrop = 1,
-        width = 100
-      }
-    }
-  },
-
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -186,12 +175,18 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
+
+-- Set shiftwidth and expandtab
+vim.o.shiftwidth = 2
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.expandtab = true
 
 -- Set highlight on search
 vim.o.hlsearch = true
@@ -253,7 +248,21 @@ vim.keymap.set({ 'n', 'i', 'v' }, '<C-k>', '<C-w><C-k>', { silent = true })
 vim.keymap.set({ 'n', 'i', 'v' }, '<C-l>', '<C-w><C-l>', { silent = true })
 
 -- Remap <leader>z to toggle zen mode
-vim.keymap.set({ 'n', 'v' }, '<leader>z', require('zen-mode').toggle, { desc = 'Toggle Zen Mode' })
+vim.keymap.set('n', '<leader>z', require('zen-mode').toggle, { desc = 'Toggle Zen Mode' })
+
+-- <leader>t to toggle dark/light background
+vim.keymap.set(
+  'n',
+  '<leader>t',
+  function()
+    if vim.o.background == 'dark' then
+      vim.o.background = 'light'
+    else
+      vim.o.background = 'dark'
+    end
+  end,
+  { desc = 'Toggle dark mode' }
+)
 
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
