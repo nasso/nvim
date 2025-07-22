@@ -1,6 +1,9 @@
 -- colours!
 vim.opt.termguicolors = true
 
+-- keep just one status line for all window splits
+vim.opt.laststatus = 3
+
 -- line numbers
 vim.opt.nu = true
 vim.opt.rnu = true
@@ -28,6 +31,11 @@ vim.opt.smartindent = true
 -- wrap lines because tailwind
 vim.opt.wrap = true
 vim.opt.linebreak = true
+vim.opt.breakindent = true
+vim.opt.showbreak = "└► "
+
+-- always keep some lines before and after the cursor when scrolling
+vim.opt.scrolloff = 10
 
 -- don't create annoying swap files
 vim.opt.swapfile = false
@@ -59,3 +67,19 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   pattern = '*',
   callback = function() vim.highlight.on_yank { higroup = 'IncSearch' } end,
 })
+
+-- highlight current line on the active buffer (thanks tj)
+vim.opt.cursorline = true
+local group = vim.api.nvim_create_augroup("CursorLineControl", { clear = true })
+local set_cursorline = function(event, value, pattern)
+  vim.api.nvim_create_autocmd(event, {
+    group = group,
+    pattern = pattern,
+    callback = function()
+      vim.opt_local.cursorline = value
+    end,
+  })
+end
+set_cursorline("WinLeave", false)
+set_cursorline("WinEnter", true)
+set_cursorline("FileType", false, "TelescopePrompt")
