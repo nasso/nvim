@@ -2,6 +2,10 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- <leader>x to execute lua from the buffer!! (thanks tj)
+vim.keymap.set('n', '<leader>x', ":.lua<CR>")
+vim.keymap.set('v', '<leader>x', ":lua<CR>")
+
 -- space is the leader, so we disable its default behaviour
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 
