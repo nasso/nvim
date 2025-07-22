@@ -26,7 +26,13 @@ return {
           find_command = { "rg", "--files", "--no-require-git" },
         })
       end, {})
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, {})
+      vim.keymap.set('n', '<leader>sg', function()
+        builtin.live_grep({
+          hidden = true,
+          file_ignore_patterns = { ".git", '.jj' },
+          additional_args = { "--no-require-git" },
+        })
+      end, {})
       vim.keymap.set('n', '<leader>o', builtin.buffers, {})
     end
   },
