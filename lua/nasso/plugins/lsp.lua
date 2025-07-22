@@ -139,6 +139,7 @@ return {
                 '.prettierrc.mjs',
                 '.prettierrc.cjs',
                 '.prettierrc.toml',
+                'package.json',
               },
             }
 
