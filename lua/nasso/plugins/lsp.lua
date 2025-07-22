@@ -134,6 +134,14 @@ return {
       lsp_zero.format_mapping('=', format_opts)
       lsp_zero.format_on_save(format_opts)
 
+      vim.diagnostic.config({
+        signs = {
+          numhl = {
+            [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+          }
+        }
+      })
+
       require('mason-lspconfig').setup {
         ensure_installed = { "efm" },
         handlers = {
