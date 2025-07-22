@@ -24,6 +24,10 @@ return {
     'tpope/vim-unimpaired',
   },
   {
+    -- Parenthesis balancing for S-expressions (lisps)
+    'gpanders/nvim-parinfer'
+  },
+  {
     --    ┌────────────────────────────────────────────────┐
     -- ┌──│this cool ass plugin lets me do this shit easily│───┐
     -- │  └────────────────────────────────────────────────┘   │
