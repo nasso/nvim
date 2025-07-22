@@ -28,7 +28,7 @@ return {
       local builtin = require('telescope.builtin')
 
       vim.keymap.set('n', '<leader>sf', function()
-        builtin.find_files({ hidden = true, file_ignore_patterns = { ".git" } })
+        builtin.find_files({ hidden = true, file_ignore_patterns = { ".git", '.jj' } })
       end, {})
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, {})
       vim.keymap.set('n', '<leader>o', builtin.buffers, {})
@@ -49,6 +49,9 @@ return {
               folder = false,
             }
           }
+        },
+        filters = {
+          custom = { '^\\.git', '^\\.jj' }
         },
         diagnostics = {
           enable = true,
