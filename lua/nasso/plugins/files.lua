@@ -28,7 +28,11 @@ return {
       local builtin = require('telescope.builtin')
 
       vim.keymap.set('n', '<leader>sf', function()
-        builtin.find_files({ hidden = true, file_ignore_patterns = { ".git", '.jj' } })
+        builtin.find_files({
+          hidden = true,
+          file_ignore_patterns = { ".git", '.jj' },
+          find_command = { "rg", "--files", "--no-require-git" },
+        })
       end, {})
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, {})
       vim.keymap.set('n', '<leader>o', builtin.buffers, {})
