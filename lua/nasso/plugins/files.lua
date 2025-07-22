@@ -28,14 +28,14 @@ return {
       vim.keymap.set('n', '<leader>sf', function()
         builtin.find_files({
           hidden = true,
-          file_ignore_patterns = { ".git", '.jj' },
+          file_ignore_patterns = { "%.git/", '%.jj/' },
           find_command = { "rg", "--files", "--no-require-git" },
         })
       end, {})
       vim.keymap.set('n', '<leader>sg', function()
         builtin.live_grep({
           hidden = true,
-          file_ignore_patterns = { ".git", '.jj' },
+          file_ignore_patterns = { "%.git/", '%.jj/' },
           additional_args = { "--no-require-git" },
           disable_coordinates = true,
         })
