@@ -1,3 +1,6 @@
+-- i hate the right click menu
+vim.opt.mousemodel = "extend"
+
 -- colours!
 vim.opt.termguicolors = true
 
@@ -59,6 +62,9 @@ vim.opt.completeopt = "menuone,noselect"
 
 -- show whitespace characters other than regular spaces
 vim.wo.list = true
+
+-- make `.h` files always be C by default (this line by c++ hate gang)
+vim.g.c_syntax_for_h = true
 
 -- highlight selection on yank
 vim.api.nvim_create_autocmd('TextYankPost', {
