@@ -31,9 +31,10 @@ vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 
--- always keep 8 lines above and below the cursor
-vim.opt.scrolloff = 8
+-- sign column
 vim.opt.signcolumn = "yes"
+
+-- include '@' in the list of characters that can appear in file names
 vim.opt.isfname:append("@-@")
 
 -- update time
