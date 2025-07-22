@@ -139,14 +139,22 @@ return {
         handlers = {
           lsp_zero.default_setup,
           rust_analyzer = function()
+            local features = "all" --- @type string | string[]
+
+            if vim.env.LSP_RUST_ANALYZER_FEATURES then
+              features = vim.split(vim.env.LSP_RUST_ANALYZER_FEATURES, ",")
+            elseif vim.env.LSP_RUST_FEATURES then
+              features = vim.split(vim.env.LSP_RUST_FEATURES, ",")
+            end
+
             require('lspconfig').rust_analyzer.setup {
               settings = {
                 ["rust-analyzer"] = {
                   checkOnSave = true,
+                  cargo = { features = features },
                   check = {
                     enable = true,
                     command = "clippy",
-                    features = "all",
                   },
                 }
               }
