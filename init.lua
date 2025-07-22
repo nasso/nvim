@@ -186,6 +186,9 @@ require('lazy').setup({
 -- See `:help vim.o`
 -- NOTE: You can change these options as you wish!
 
+-- add rulers
+vim.o.cc = "81,101,121"
+
 -- Set shiftwidth and expandtab
 vim.o.shiftwidth = 2
 vim.o.tabstop = 2
@@ -333,7 +336,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'lua', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim' },
+  ensure_installed = { 'c', 'lua', 'rust', 'tsx', 'typescript', 'vimdoc', 'vim', 'markdown' },
 
   -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
   auto_install = false,
@@ -545,6 +548,15 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+-- add mdx support
+vim.filetype.add({
+  extension = {
+    mdx = 'mdx'
+  }
+})
+
+vim.treesitter.language.register("markdown", "mdx")
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
