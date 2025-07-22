@@ -11,7 +11,18 @@ return {
       require('ayu').setup {
         mirage = false,
         overrides = function()
-          return { Comment = { fg = colors.comment } }
+          return {
+            Normal = { bg = "None" },
+            NormalFloat = { bg = "none" },
+            ColorColumn = { bg = "None" },
+            SignColumn = { bg = "None" },
+            Folded = { bg = "None" },
+            FoldColumn = { bg = "None" },
+            CursorLine = { bg = "None" },
+            CursorColumn = { bg = "None" },
+            VertSplit = { bg = "None" },
+            Comment = { fg = colors.comment },
+          }
         end
       }
 
