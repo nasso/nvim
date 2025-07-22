@@ -18,6 +18,10 @@ vim.opt.expandtab = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 
+-- case insensitive search
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
 -- e.g. indent new lines after a '{' or before a '}'
 vim.opt.smartindent = true
 
