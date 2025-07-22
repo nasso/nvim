@@ -5,7 +5,15 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      require('ayu').setup { mirage = false }
+      local colors = require('ayu.colors')
+      colors.generate()
+
+      require('ayu').setup {
+        mirage = false,
+        overrides = function()
+          return { Comment = { fg = colors.comment } }
+        end
+      }
 
       vim.cmd.colorscheme "ayu"
     end,
