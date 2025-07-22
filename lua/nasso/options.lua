@@ -68,7 +68,7 @@ vim.g.c_syntax_for_h = true
 
 -- highlight selection on yank
 vim.api.nvim_create_autocmd('TextYankPost', {
-  group = vim.api.nvim_create_augroup('highlight_yank', {}),
+  group = vim.api.nvim_create_augroup('highlight_yank', { clear = true }),
   desc = 'Hightlight selection on yank',
   pattern = '*',
   callback = function() vim.highlight.on_yank { higroup = 'IncSearch' } end,
@@ -97,5 +97,41 @@ vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
   callback = function()
     local name = vim.fs.basename(vim.fn.getcwd())
     vim.go.titlestring = "nvim:" .. name .. "/"
+  end,
+})
+
+-- ffmpeg indentation
+local ffmpeg_style_group = vim.api.nvim_create_augroup(
+  'ffmpeg_style',
+  { clear = true }
+)
+local ffmpeg_cur_line_hl_group = vim.api.nvim_create_augroup(
+  'ffmpeg_style_bad_ws_cur_line',
+  { clear = true }
+)
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  desc = 'FFmpeg C coding style',
+  pattern = {
+    "*/ffmpeg/libav{device,format,codec,filter,util}/*.[ch]",
+    "*/ffmpeg/libsw{resample,scale}/*.[ch]",
+    "*/ffmpeg/libpostproc/*.[ch]",
+  },
+  group = ffmpeg_style_group,
+  callback = function()
+    vim.bo.cindent = true
+    vim.bo.cinoptions = "(0"
+
+    -- highlight trailing whitespace and end of line
+    vim.api.nvim_set_hl(0, "ForbiddenWhitespace", { bg = "red", fg = "red" })
+    vim.cmd([[match ForbiddenWhitespace /\s\+$\|\t/]])
+
+    -- don't highlight on current line when typing
+    vim.api.nvim_create_autocmd("InsertEnter", {
+      pattern = "*.[ch]",
+      group = ffmpeg_cur_line_hl_group,
+      callback = function()
+        vim.cmd([[match ForbiddenWhitespace /\t\|\s\+\%#\@<!$/]])
+      end,
+    })
   end,
 })
