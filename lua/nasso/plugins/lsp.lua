@@ -210,21 +210,23 @@ return {
               },
             }
 
+            local filetypes = {}
+            local languages = {}
+
+            for _, v in pairs(format_opts.servers.efm) do
+              filetypes[#filetypes + 1] = v
+              languages[v] = { prettierd }
+            end
+
             require('lspconfig').efm.setup {
+              filetypes = filetypes,
               init_options = {
                 documentFormatting = true,
                 documentRangeFormatting = true,
               },
               settings = {
                 rootMarkers = { '.git/', '.jj/' },
-                languages = {
-                  javascript = { prettierd },
-                  javascriptreact = { prettierd },
-                  typescript = { prettierd },
-                  typescriptreact = { prettierd },
-                  svelte = { prettierd },
-                  markdown = { prettierd },
-                }
+                languages = languages,
               }
             }
           end,
