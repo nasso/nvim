@@ -142,6 +142,20 @@ return {
         },
         handlers = {
           lsp_zero.default_setup,
+          rust_analyzer = function()
+            require('lspconfig').rust_analyzer.setup {
+              settings = {
+                ["rust-analyzer"] = {
+                  checkOnSave = true,
+                  check = {
+                    enable = true,
+                    command = "clippy",
+                    features = "all",
+                  },
+                }
+              }
+            }
+          end,
           lua_ls = function()
             -- (optional) configure lua language server for neovim
             local lua_opts = lsp_zero.nvim_lua_ls()
