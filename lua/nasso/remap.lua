@@ -31,7 +31,11 @@ vim.keymap.set({ 'n', 'i', 'v' }, '<C-l>', '<C-w><C-l>', { silent = true })
 
 -- make some commands case insensitive because omfg!!!
 vim.cmd "cnoreabbrev W w"
+vim.cmd "cnoreabbrev Wa wa"
+vim.cmd "cnoreabbrev WA wa"
 vim.cmd "cnoreabbrev Q q"
+vim.cmd "cnoreabbrev Qa qa"
+vim.cmd "cnoreabbrev QA qa"
 vim.cmd "cnoreabbrev E e"
 
 -- "yes please YANK when i PASTE" - Statement dreamed up by the utterly Deranged
