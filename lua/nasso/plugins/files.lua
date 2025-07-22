@@ -51,7 +51,7 @@ return {
           }
         },
         filters = {
-          custom = { '^\\.git', '^\\.jj' }
+          custom = { '^\\.git$', '^\\.jj$' }
         },
         diagnostics = {
           enable = true,
