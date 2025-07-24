@@ -1,31 +1,31 @@
 return {
   {
     -- toggle comments with gc
-    'numToStr/Comment.nvim',
+    "numToStr/Comment.nvim",
     opts = {},
   },
   {
     -- some plugins by tpope depend on this for `.` support
-    'tpope/vim-repeat',
+    "tpope/vim-repeat",
   },
   {
     -- plugin to "work with variations of a word"
     -- - smart abbreviations
     -- - case preserving substitutions with :S[ubvert]
     -- - case conversions
-    'tpope/vim-abolish',
+    "tpope/vim-abolish",
   },
   {
     -- surround.vim: Delete/change/add parentheses/quotes/XML-tags/much more with ease
-    'tpope/vim-surround',
+    "tpope/vim-surround",
   },
   {
     -- a bunch of commands like [x, ]x, [f, ]f, [y, ]y etc...
-    'tpope/vim-unimpaired',
+    "tpope/vim-unimpaired",
   },
   {
     -- Parenthesis balancing for S-expressions (lisps)
-    'gpanders/nvim-parinfer'
+    "gpanders/nvim-parinfer",
   },
   {
     --    ┌────────────────────────────────────────────────┐
@@ -33,7 +33,7 @@ return {
     -- │  └────────────────────────────────────────────────┘   │
     -- │      │     │       │    │        │        │     │     │
     -- ▼      ▼     ▼       ▼    ▼        ▼        ▼     ▼     ▼
-    'jbyuki/venn.nvim',
+    "jbyuki/venn.nvim",
     keys = "<leader>v",
     config = function()
       local function toggle()
@@ -61,13 +61,13 @@ return {
       end
 
       vim.keymap.set("n", "<leader>v", toggle, { noremap = true })
-    end
+    end,
   },
 
   {
     "iamcco/markdown-preview.nvim",
     cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-    build = "cd app && npx --yes yarn install",
+    build = "cd app && npm install && git restore .",
     init = function()
       vim.g.mkdp_filetypes = { "markdown" }
       vim.g.mkdp_auto_close = 0

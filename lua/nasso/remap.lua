@@ -3,31 +3,31 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- <leader>x to execute lua from the buffer!! (thanks tj)
-vim.keymap.set('n', '<leader>x', ":.lua<CR>")
-vim.keymap.set('v', '<leader>x', ":lua<CR>")
+vim.keymap.set("n", "<leader>x", ":.lua<CR>")
+vim.keymap.set("v", "<leader>x", ":lua<CR>")
 
 -- space is the leader, so we disable its default behaviour
-vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- make j and k behave expectedly on wrapped lines
-vim.keymap.set({ 'n', 'v' }, 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-vim.keymap.set({ 'n', 'v' }, 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set({ "n", "v" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set({ "n", "v" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 
 -- jk/kj to exit insert mode
-vim.keymap.set('i', 'jk', '<Esc>', { silent = true })
-vim.keymap.set('i', 'jK', '<Esc>', { silent = true })
-vim.keymap.set('i', 'Jk', '<Esc>', { silent = true })
-vim.keymap.set('i', 'JK', '<Esc>', { silent = true })
-vim.keymap.set('i', 'kj', '<Esc>', { silent = true })
-vim.keymap.set('i', 'Kj', '<Esc>', { silent = true })
-vim.keymap.set('i', 'kJ', '<Esc>', { silent = true })
-vim.keymap.set('i', 'KJ', '<Esc>', { silent = true })
+vim.keymap.set("i", "jk", "<Esc>", { silent = true })
+vim.keymap.set("i", "jK", "<Esc>", { silent = true })
+vim.keymap.set("i", "Jk", "<Esc>", { silent = true })
+vim.keymap.set("i", "JK", "<Esc>", { silent = true })
+vim.keymap.set("i", "kj", "<Esc>", { silent = true })
+vim.keymap.set("i", "Kj", "<Esc>", { silent = true })
+vim.keymap.set("i", "kJ", "<Esc>", { silent = true })
+vim.keymap.set("i", "KJ", "<Esc>", { silent = true })
 
 -- <C-[hjkl]> to move around windows
-vim.keymap.set({ 'n', 'i', 'v' }, '<C-h>', '<C-w><C-h>', { silent = true })
-vim.keymap.set({ 'n', 'i', 'v' }, '<C-j>', '<C-w><C-j>', { silent = true })
-vim.keymap.set({ 'n', 'i', 'v' }, '<C-k>', '<C-w><C-k>', { silent = true })
-vim.keymap.set({ 'n', 'i', 'v' }, '<C-l>', '<C-w><C-l>', { silent = true })
+vim.keymap.set({ "n", "i", "v" }, "<C-h>", "<C-w><C-h>", { silent = true })
+vim.keymap.set({ "n", "i", "v" }, "<C-j>", "<C-w><C-j>", { silent = true })
+vim.keymap.set({ "n", "i", "v" }, "<C-k>", "<C-w><C-k>", { silent = true })
+vim.keymap.set({ "n", "i", "v" }, "<C-l>", "<C-w><C-l>", { silent = true })
 
 -- make some commands case insensitive because omfg!!!
 vim.cmd "cnoreabbrev W w"
@@ -54,30 +54,26 @@ vim.keymap.set("i", "<C-c>", "<Esc>", { silent = true })
 
 -- <leader>t to toggle dark/light mode
 vim.keymap.set(
-  'n',
-  '<leader>t',
+  "n",
+  "<leader>t",
   function()
-    if vim.o.background == 'dark' then
-      vim.o.background = 'light'
+    if vim.o.background == "dark" then
+      vim.o.background = "light"
     else
-      vim.o.background = 'dark'
+      vim.o.background = "dark"
     end
   end,
-  { desc = 'Toggle dark mode' }
+  { desc = "Toggle dark mode" }
 )
 
 -- <C-i> in insert mode will insert a nano id
 vim.keymap.set(
-  'i',
-  '/id',
+  "i",
+  "/id",
   function()
     local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-    local text = vim.fn.system("pnpm dlx nanoid"):match('(%S+)%s*$')
+    local text = vim.fn.system("pnpm dlx nanoid"):match("(%S+)%s*$")
     vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, { text })
   end,
-  { desc = 'Insert a NanoID' }
+  { desc = "Insert a NanoID" }
 )
-
--- LSP stuff
-vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover({border = "rounded"})<cr>')
-vim.keymap.set('i', '<C-s>', '<cmd>lua vim.lsp.buf.signature_help({border = "rounded"})<cr>')

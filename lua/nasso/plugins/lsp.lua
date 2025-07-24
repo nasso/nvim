@@ -1,66 +1,41 @@
-local format_opts = {
-  format_opts = { async = false, timeout_ms = 10000 },
-  servers = {
-    ['rust_analyzer'] = { 'rust' },
-    ['lua_ls'] = { 'lua' },
-    ['hls'] = { 'haskell' },
-    ['efm'] = {
-      'json',
-      'javascript',
-      'typescript',
-      'javascriptreact',
-      'typescriptreact',
-      'svelte',
-      'markdown',
-      'css',
-      'html',
-      'yaml',
-    },
-  }
-}
-
 return {
   {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
-    lazy = true,
-    config = false,
-    init = function()
-      -- disable automatic setup, we are doing it manually
-      vim.g.lsp_zero_extend_cmp = 0
-      vim.g.lsp_zero_extend_lspconfig = 0
-    end,
-  },
-
-  {
-    'williamboman/mason.nvim',
-    lazy = false,
+    "mason-org/mason.nvim",
+    tag = "v2.0.1",
+    pin = true,
     config = true,
+    lazy = false,
     opts = {
       PATH = "append",
+    },
+  },
+  {
+    "mason-org/mason-lspconfig.nvim",
+    tag = "v2.0.0",
+    pin = true,
+    config = false,
+    lazy = true,
+    opts = {},
+    dependencies = {
+      "mason-org/mason.nvim",
+      "neovim/nvim-lspconfig",
     },
   },
 
   -- autocompletion
   {
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
-    dependencies = {
-      { 'L3MON4D3/LuaSnip' },
-    },
+    "hrsh7th/nvim-cmp",
+    event = "InsertEnter",
     config = function()
-      -- here is where you configure the autocompletion settings.
-      local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_cmp()
-
-      -- and you can configure cmp even more, if you want to.
-      local cmp = require('cmp')
-      local cmp_action = lsp_zero.cmp_action()
+      local cmp = require "cmp"
 
       local win_cfg = cmp.config.window.bordered()
       win_cfg.col_offset = -1
 
       cmp.setup {
+        sources = {
+          { name = "nvim_lsp" },
+        },
         window = {
           completion = win_cfg,
           documentation = win_cfg,
@@ -75,8 +50,7 @@ return {
                   entry.completion_item.labelDetails
                   and entry.completion_item.labelDetails.detail
               then
-                item.menu = string.format(
-                  "[lsp]%s",
+                item.menu = ("[lsp]%s"):format(
                   entry.completion_item.labelDetails.detail
                 )
               else
@@ -85,171 +59,130 @@ return {
             elseif src == "nvim_lua" then
               item.menu = "[nvim]"
             else
-              item.menu = string.format("[%s]", src)
+              item.menu = ("[%s]"):format(src)
             end
 
             return item
           end,
         },
         mapping = cmp.mapping.preset.insert {
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-d>'] = cmp.mapping.scroll_docs(4),
-          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-          ['<CR>'] = cmp.mapping.confirm {
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-u>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-d>"] = cmp.mapping.scroll_docs(4),
+          ["<C-f>"] = function() vim.snippet.jump(1) end,
+          ["<C-b>"] = function() vim.snippet.jump(-1) end,
+          ["<CR>"] = cmp.mapping.confirm {
             behavior = cmp.ConfirmBehavior.Replace,
             select = true,
           },
-        }
+        },
       }
-    end
+    end,
   },
 
   -- LSP
   {
-    'neovim/nvim-lspconfig',
-    cmd = { 'LspInfo', 'LspInstall', 'LspStart' },
-    event = { 'BufReadPre', 'BufNewFile' },
+    "neovim/nvim-lspconfig",
+    tag = "v2.3.0",
+    pin = true,
+    cmd = { "LspInfo", "LspInstall", "LspStart" },
+    event = { "BufReadPre", "BufNewFile" },
     dependencies = {
-      { 'hrsh7th/cmp-nvim-lsp' },
-      { 'williamboman/mason-lspconfig.nvim' },
+      "hrsh7th/cmp-nvim-lsp",
+      "mason-org/mason-lspconfig.nvim",
     },
     config = function()
-      -- this is where all the LSP shenanigans will live
-      local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_lspconfig()
+      local lspconfig = require "lspconfig"
+      local cmp_nvim_lsp = require "cmp_nvim_lsp"
 
-      lsp_zero.on_attach(function(client, bufnr)
-        -- see :help lsp-zero-keybindings
-        -- to learn the available actions
-        lsp_zero.default_keymaps { buffer = bufnr }
+      local lspconfig_defaults = lspconfig.util.default_config
 
-        local opts = { buffer = bufnr, remap = false }
+      lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+        "force",
+        lspconfig_defaults.capabilities,
+        cmp_nvim_lsp.default_capabilities()
+      )
 
-        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-        vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-      end)
+      vim.api.nvim_create_autocmd("LspAttach", {
+        callback = function(event)
+          local id = vim.tbl_get(event, "data", "client_id")
+          local client = id and vim.lsp.get_client_by_id(id)
+          if client == nil then
+            return
+          end
 
-      lsp_zero.format_mapping('=', format_opts)
-      lsp_zero.format_on_save(format_opts)
+          local opts = { buffer = event.buf, remap = false }
+
+          vim.keymap.set("n", "K", function()
+            vim.lsp.buf.hover({ border = "rounded" })
+          end, opts)
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+          vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+          vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
+          vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+          vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
+          vim.keymap.set("n", "gl", function()
+            vim.diagnostic.open_float({
+              border = "rounded",
+            })
+          end, opts)
+          vim.keymap.set("i", "<C-s>", vim.lsp.buf.signature_help, opts)
+          vim.keymap.set("n", "K", '<cmd>lua vim.lsp.buf.hover({border = "rounded"})<cr>')
+          vim.keymap.set({ "n", "x" }, "=", function()
+            vim.lsp.buf.format({ async = true })
+          end, opts)
+          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+          vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+
+          if client:supports_method("textDocument/formatting") then
+            local group = "lsp_autoformat"
+            vim.api.nvim_create_augroup(group, { clear = false })
+            vim.api.nvim_clear_autocmds({ group = group, buffer = event.buf })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+              buffer = event.buf,
+              group = group,
+              desc = "LSP format on save",
+              callback = function()
+                -- disable async when formatting on save
+                vim.lsp.buf.format({
+                  async = false,
+                  timeout_ms = 10000,
+                  filter = function(c)
+                    -- ban some LSPs that suck at formatting (sorry)
+                    return not vim.tbl_contains({ "ts_ls" }, c.name)
+                  end,
+                })
+              end,
+            })
+          end
+        end,
+      })
 
       vim.diagnostic.config({
         signs = {
           numhl = {
-            [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
-          }
-        }
+            [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+          },
+        },
       })
 
-      require('mason-lspconfig').setup {
-        ensure_installed = { "efm" },
-        handlers = {
-          lsp_zero.default_setup,
-          rust_analyzer = function()
-            local features = "all" --- @type string | string[]
+      local mason = require "mason"
+      local mason_lspconfig = require "mason-lspconfig"
 
-            if vim.env.LSP_RUST_ANALYZER_FEATURES then
-              features = vim.split(vim.env.LSP_RUST_ANALYZER_FEATURES, ",")
-            elseif vim.env.LSP_RUST_FEATURES then
-              features = vim.split(vim.env.LSP_RUST_FEATURES, ",")
-            end
-
-            require('lspconfig').rust_analyzer.setup {
-              settings = {
-                ["rust-analyzer"] = {
-                  checkOnSave = true,
-                  cargo = { features = features },
-                  check = {
-                    enable = true,
-                    command = "clippy",
-                  },
-                }
-              }
-            }
-          end,
-          clangd = function()
-            local cmd = {
-              "clangd",
-              "--background-index",
-              "--clang-tidy",
-              "--log=error",
-            }
-            if vim.env.LSP_CLANGD_QUERY_DRIVER then
-              cmd[#cmd + 1] = "--query-driver=" .. vim.env.LSP_CLANGD_QUERY_DRIVER
-            end
-            require('lspconfig').clangd.setup { cmd = cmd }
-          end,
-          lua_ls = function()
-            -- (optional) configure lua language server for neovim
-            local lua_opts = lsp_zero.nvim_lua_ls()
-
-            require('lspconfig').lua_ls.setup(lua_opts)
-          end,
-          ts_ls = function()
-            require('lspconfig').ts_ls.setup {
-              on_init = function(client)
-                client.server_capabilities.documentFormattingProvider = false
-                client.server_capabilities.documentFormattingRangeProvider = false
-              end,
-            }
-          end,
-          svelte = function()
-            require('lspconfig').svelte.setup {
-              on_attach = function(client)
-                vim.api.nvim_create_autocmd("BufWritePost", {
-                  group = vim.api.nvim_create_augroup("svelte_ondidchangetsorjsfile", { clear = true }),
-                  pattern = { "*.js", "*.ts" },
-                  callback = function(ctx)
-                    client.notify("$/onDidChangeTsOrJsFile", { uri = ctx.match })
-                  end,
-                })
-              end,
-            }
-          end,
-          efm = function()
-            local prettierd = {
-              formatCommand = "prettierd '${INPUT}' ${--range-start=charStart} ${--range-end=charEnd}",
-              formatCanRange = true,
-              formatStdin = true,
-              rootMarkers = {
-                '.prettierrc',
-                '.prettierrc.json',
-                '.prettierrc.js',
-                '.prettierrc.yml',
-                '.prettierrc.yaml',
-                '.prettierrc.json5',
-                '.prettierrc.mjs',
-                '.prettierrc.cjs',
-                '.prettierrc.toml',
-                'package.json',
-              },
-            }
-
-            local filetypes = {}
-            local languages = {}
-
-            for _, v in pairs(format_opts.servers.efm) do
-              filetypes[#filetypes + 1] = v
-              languages[v] = { prettierd }
-            end
-
-            require('lspconfig').efm.setup {
-              filetypes = filetypes,
-              init_options = {
-                documentFormatting = true,
-                documentRangeFormatting = true,
-              },
-              settings = {
-                rootMarkers = { '.git/', '.jj/' },
-                languages = languages,
-              }
-            }
-          end,
-        }
+      mason.setup {}
+      mason_lspconfig.setup {
+        ensure_installed = {
+          "lua_ls",
+          "efm",
+        },
       }
 
-      for _, method in ipairs({ 'textDocument/diagnostic', 'workspace/diagnostic' }) do
+      vim.lsp.config("*", {
+        root_markers = { ".git", ".jj" },
+      })
+
+      for _, method in ipairs({ "textDocument/diagnostic", "workspace/diagnostic" }) do
         local default_diagnostic_handler = vim.lsp.handlers[method]
         vim.lsp.handlers[method] = function(err, result, context, config)
           if err ~= nil and err.code == -32802 then
@@ -258,6 +191,6 @@ return {
           return default_diagnostic_handler(err, result, context, config)
         end
       end
-    end
-  }
+    end,
+  },
 }

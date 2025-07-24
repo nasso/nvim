@@ -15,6 +15,6 @@ vim.opt.rtp:prepend(lazypath)
 -- load plugins
 require("lazy").setup("nasso.plugins", {
   ui = {
-    border = "rounded"
-  }
+    border = "rounded",
+  },
 })

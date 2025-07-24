@@ -1,14 +1,14 @@
 return {
   {
-    'Shatur/neovim-ayu',
+    "Shatur/neovim-ayu",
     -- disable lazy loading because this is the main theme
     lazy = false,
     priority = 1000,
     config = function()
-      local colors = require('ayu.colors')
+      local colors = require("ayu.colors")
       colors.generate()
 
-      require('ayu').setup {
+      require("ayu").setup {
         mirage = false,
         overrides = function()
           return {
@@ -23,43 +23,43 @@ return {
             VertSplit = { bg = "None" },
             Comment = { fg = colors.comment },
           }
-        end
+        end,
       }
 
       vim.cmd.colorscheme "ayu"
     end,
   },
   {
-    'nvim-lualine/lualine.nvim',
+    "nvim-lualine/lualine.nvim",
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'ayu',
-        component_separators = '',
-        section_separators = { left = '', right = '' },
+        theme = "ayu",
+        component_separators = "",
+        section_separators = { left = "", right = "" },
       },
       sections = {
         lualine_a = {
-          { 'mode', separator = { left = '', right = '' } }
+          { "mode", separator = { left = "", right = "" } },
         },
-        lualine_b = { 'filename', 'branch' },
+        lualine_b = { "filename", "branch" },
         lualine_c = {},
         lualine_x = {},
-        lualine_y = { 'filetype' },
+        lualine_y = { "filetype" },
         lualine_z = {
-          { 'location', separator = { left = '', right = '' } },
+          { "location", separator = { left = "", right = "" } },
         },
       },
       inactive_sections = {
         lualine_a = {
-          { 'filename', separator = { left = '', right = '' } },
+          { "filename", separator = { left = "", right = "" } },
         },
         lualine_b = {},
         lualine_c = {},
         lualine_x = {},
         lualine_y = {},
         lualine_z = {
-          { 'location', separator = { left = '', right = '' } },
+          { "location", separator = { left = "", right = "" } },
         },
       },
     },
@@ -68,5 +68,5 @@ return {
   {
     "lukas-reineke/virt-column.nvim",
     opts = {},
-  }
+  },
 }

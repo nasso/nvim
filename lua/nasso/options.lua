@@ -70,11 +70,11 @@ vim.wo.list = true
 vim.g.c_syntax_for_h = true
 
 -- highlight selection on yank
-vim.api.nvim_create_autocmd('TextYankPost', {
-  group = vim.api.nvim_create_augroup('highlight_yank', { clear = true }),
-  desc = 'Hightlight selection on yank',
-  pattern = '*',
-  callback = function() vim.highlight.on_yank { higroup = 'IncSearch' } end,
+vim.api.nvim_create_autocmd("TextYankPost", {
+  group = vim.api.nvim_create_augroup("highlight_yank", { clear = true }),
+  desc = "Hightlight selection on yank",
+  pattern = "*",
+  callback = function() vim.highlight.on_yank { higroup = "IncSearch" } end,
 })
 
 -- highlight current line on the active buffer (thanks tj)
@@ -105,15 +105,15 @@ vim.api.nvim_create_autocmd({ "VimEnter", "DirChanged" }, {
 
 -- ffmpeg indentation
 local ffmpeg_style_group = vim.api.nvim_create_augroup(
-  'ffmpeg_style',
+  "ffmpeg_style",
   { clear = true }
 )
 local ffmpeg_cur_line_hl_group = vim.api.nvim_create_augroup(
-  'ffmpeg_style_bad_ws_cur_line',
+  "ffmpeg_style_bad_ws_cur_line",
   { clear = true }
 )
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-  desc = 'FFmpeg C coding style',
+  desc = "FFmpeg C coding style",
   pattern = {
     "*/ffmpeg/libav{device,format,codec,filter,util}/*.[ch]",
     "*/ffmpeg/libsw{resample,scale}/*.[ch]",
