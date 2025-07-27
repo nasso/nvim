@@ -14,7 +14,7 @@ return {
   {
     -- fuzzy finder
     "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",
+    branch = "master",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("telescope").setup {
@@ -42,10 +42,6 @@ return {
       end, {})
       vim.keymap.set("n", "<leader>o", builtin.buffers, {})
       vim.keymap.set("n", "<leader>d", builtin.diagnostics, {})
-      vim.keymap.set("n", "gd", builtin.lsp_definitions, {})
-      vim.keymap.set("n", "gi", builtin.lsp_implementations, {})
-      vim.keymap.set("n", "go", builtin.lsp_type_definitions, {})
-      vim.keymap.set("n", "gr", builtin.lsp_references, {})
     end,
   },
 

@@ -90,6 +90,7 @@ return {
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "mason-org/mason-lspconfig.nvim",
+      "nvim-telescope/telescope.nvim",
     },
     config = function()
       local lspconfig = require "lspconfig"
@@ -113,14 +114,16 @@ return {
 
           local opts = { buffer = event.buf, remap = false }
 
+          local telescope = require "telescope.builtin"
+
           vim.keymap.set("n", "K", function()
             vim.lsp.buf.hover({ border = "rounded" })
           end, opts)
-          vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+          vim.keymap.set("n", "gd", telescope.lsp_definitions, opts)
           vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-          vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-          vim.keymap.set("n", "go", vim.lsp.buf.type_definition, opts)
-          vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+          vim.keymap.set("n", "gi", telescope.lsp_implementations, opts)
+          vim.keymap.set("n", "go", telescope.lsp_type_definitions, opts)
+          vim.keymap.set("n", "gr", telescope.lsp_references, opts)
           vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, opts)
           vim.keymap.set("n", "gl", function()
             vim.diagnostic.open_float({
@@ -128,7 +131,6 @@ return {
             })
           end, opts)
           vim.keymap.set("i", "<C-s>", vim.lsp.buf.signature_help, opts)
-          vim.keymap.set("n", "K", '<cmd>lua vim.lsp.buf.hover({border = "rounded"})<cr>')
           vim.keymap.set({ "n", "x" }, "=", function()
             vim.lsp.buf.format({ async = true })
           end, opts)
