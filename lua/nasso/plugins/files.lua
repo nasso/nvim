@@ -41,7 +41,11 @@ return {
         })
       end, {})
       vim.keymap.set("n", "<leader>o", builtin.buffers, {})
-      vim.keymap.set("n", "<leader>d", builtin.diagnostics, {})
+      vim.keymap.set("n", "<leader>d", function()
+        builtin.diagnostics({
+          severity_limit = "WARN",
+        })
+      end, {})
     end,
   },
 
