@@ -61,7 +61,8 @@ vim.opt.timeoutlen = 300
 vim.opt.completeopt = "menuone,noselect"
 
 -- show whitespace characters other than regular spaces
-vim.wo.list = true
+vim.go.list = true
+vim.go.listchars = "tab:▎ ,trail:-,nbsp:+"
 
 -- rounded floating windows by default
 -- vim.go.winborder = 'rounded'
