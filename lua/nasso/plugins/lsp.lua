@@ -26,6 +26,9 @@ return {
   {
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
+    dependencies = {
+      { "roobert/tailwindcss-colorizer-cmp.nvim", config = true },
+    },
     config = function()
       local cmp = require "cmp"
 
@@ -62,7 +65,7 @@ return {
               item.menu = ("[%s]"):format(src)
             end
 
-            return item
+            return require("tailwindcss-colorizer-cmp").formatter(entry, item)
           end,
         },
         mapping = cmp.mapping.preset.insert {
